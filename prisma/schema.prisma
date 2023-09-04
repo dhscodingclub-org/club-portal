@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Club {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  name            String        @unique
+  description     String
+  meetings        MeetingInfo[]
+  approvedFor     DateTime
+  advisor         Teacher       @relation("AdvisorClubs", fields: [advisorId], references: [id])
+  advisorId       String        @db.ObjectId
+  founder         Student       @relation("FoundedClubs", fields: [founderId], references: [id])
+  president       Student       @relation("PresidentClubs", fields: [presidentId], references: [id])
+  vicePresident   Student?      @relation("VicePresidentClubs", fields: [vicePresidentId], references: [id])
+  otherOfficers   Student[]     @relation("OfficerClubs", fields: [otherOfficerIds], references: [id])
+  founderId       String        @db.ObjectId
+  presidentId     String        @db.ObjectId
+  vicePresidentId String?       @db.ObjectId
+  otherOfficerIds String[]      @db.ObjectId
+  members         Student[]     @relation("MemberClubs", fields: [memberIds], references: [id])
+  memberIds       String[]      @db.ObjectId
+}
+
+type MeetingInfo {
+  location String
+  time     DateTime
+}
+
+model Student {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  name                 String
+  email                String   @unique
+  graduation           DateTime
+  foundedClubs         Club[]   @relation("FoundedClubs")
+  presidentInClubs     Club[]   @relation("PresidentClubs")
+  vicePresidentInClubs Club[]   @relation("VicePresidentClubs")
+  officerInClubs       Club[]   @relation("OfficerClubs", fields: [officerInClubIds], references: [id])
+  officerInClubIds     String[] @db.ObjectId
+  memberInClubs        Club[]   @relation("MemberClubs", fields: [memberInClubIds], references: [id])
+  memberInClubIds      String[] @db.ObjectId
+}
+
+model Teacher {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String
+  email          String   @unique
+  advisorOfClubs Club[]   @relation("AdvisorClubs")
+}
