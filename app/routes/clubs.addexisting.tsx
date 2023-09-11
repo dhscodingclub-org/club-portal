@@ -1,4 +1,9 @@
-import { type ActionArgs, json, type LoaderArgs, redirect } from "@remix-run/node";
+import {
+  type ActionArgs,
+  json,
+  type LoaderArgs,
+  redirect,
+} from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import React, { useEffect, useState } from "react";
 import { lastRequestTime } from "~/cookies.server";
@@ -104,11 +109,11 @@ export async function loader({ request }: LoaderArgs) {
   );
 }
 
-export const action = async ({request}: ActionArgs) => {
+export const action = async ({ request }: ActionArgs) => {
   // TODO: refactor this code
-  const form = await request.formData()
-  const name = form.get("club-name")
-  const description = form.get("description")
+  const form = await request.formData();
+  const name = form.get("club-name");
+  const description = form.get("description");
   const founder = form.get("founder");
   const presidents = form.get("presidents");
   const vicePresidents = form.get("vice-presidents");
@@ -124,13 +129,13 @@ export const action = async ({request}: ActionArgs) => {
     typeof founder !== "string" ||
     typeof advisor !== "string"
   ) {
-    return json(null, { status: 400 })
+    return json(null, { status: 400 });
   }
 
   console.log(`a`);
   // TODO: implement this route
   return redirect("/clubs");
-}
+};
 
 function FormDialog({
   meetings,
@@ -503,7 +508,9 @@ export default function AddExistingClub() {
           <FormDialog meetings={meetings} setMeetings={setMeetings} />
         </List>
         <input type="hidden" value={JSON.stringify(meetings)} name="meetings" />
-        <Button variant="contained" type="submit">Submit</Button>
+        <Button variant="contained" type="submit">
+          Submit
+        </Button>
       </Form>
     </div>
   );

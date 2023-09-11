@@ -15,7 +15,7 @@ interface MandatoryStudentComboboxProps {
 }
 
 export default function MandatoryStudentCombobox(
-  props: MandatoryStudentComboboxProps
+  props: MandatoryStudentComboboxProps,
 ) {
   const [unfilledAlert, setUnfilledAlert] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState("");

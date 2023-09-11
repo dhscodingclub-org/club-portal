@@ -12,6 +12,6 @@ export async function loader({ request }: LoaderArgs) {
           gte: afterDate,
         },
       },
-    })
+    }),
   );
 }

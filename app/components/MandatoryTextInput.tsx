@@ -4,7 +4,7 @@ interface MandatoryInputProps {
   label: string;
   placeholder: string;
   id: string;
-  type: React.HTMLInputTypeAttribute
+  type: React.HTMLInputTypeAttribute;
 }
 
 export default function MandatoryInput(props: MandatoryInputProps) {
