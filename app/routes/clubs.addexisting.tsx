@@ -1,28 +1,26 @@
-import { json, type LoaderArgs } from "@remix-run/node";
+import { type ActionArgs, json, type LoaderArgs, redirect } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import React, { useEffect, useState } from "react";
 import { lastRequestTime } from "~/cookies.server";
 import { db } from "~/utils/db.server";
-import {
-  Autocomplete,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  ListSubheader,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
+import Autocomplete from "@mui/material/Autocomplete";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import ListItemButton from "@mui/material/ListItemButton";
+import TextField from "@mui/material/TextField";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListSubheader from "@mui/material/ListSubheader";
+import ListItemText from "@mui/material/ListItemText";
+import IconButton from "@mui/material/IconButton";
 
 // TODO: find a better name for this
 interface StudentInfo {
@@ -104,6 +102,34 @@ export async function loader({ request }: LoaderArgs) {
       },
     },
   );
+}
+
+export const action = async ({request}: ActionArgs) => {
+  // TODO: refactor this code
+  const form = await request.formData()
+  const name = form.get("club-name")
+  const description = form.get("description")
+  const founder = form.get("founder");
+  const presidents = form.get("presidents");
+  const vicePresidents = form.get("vice-presidents");
+  const secretaryTreasurer = form.get("sec-treas");
+  const officers = form.get("officers");
+  const advisor = form.get("advisor");
+  const approved = form.get("approved");
+  const meetings = form.get("meetings");
+
+  if (
+    typeof name !== "string" ||
+    typeof description !== "string" ||
+    typeof founder !== "string" ||
+    typeof advisor !== "string"
+  ) {
+    return json(null, { status: 400 })
+  }
+
+  console.log(`a`);
+  // TODO: implement this route
+  return redirect("/clubs");
 }
 
 function FormDialog({
@@ -374,7 +400,7 @@ export default function AddExistingClub() {
           renderInput={(params) => (
             <TextField
               {...params}
-              name=""
+              name="presidents"
               label="Presidents"
               margin="normal"
               required
@@ -450,7 +476,7 @@ export default function AddExistingClub() {
           fullWidth
         />
         <FormControlLabel
-          control={<Checkbox />}
+          control={<Checkbox name="approved" />}
           label="Approved for this school year"
         />
         <List subheader={<ListSubheader>Meeting Times</ListSubheader>}>
@@ -476,6 +502,8 @@ export default function AddExistingClub() {
           ))}
           <FormDialog meetings={meetings} setMeetings={setMeetings} />
         </List>
+        <input type="hidden" value={JSON.stringify(meetings)} name="meetings" />
+        <Button variant="contained" type="submit">Submit</Button>
       </Form>
     </div>
   );
