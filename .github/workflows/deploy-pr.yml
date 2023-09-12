@@ -16,11 +16,12 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: true
 
       - name: Build
-        run: |
-         pnpm i
-         pnpm run build
+        run: pnpm run build
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
