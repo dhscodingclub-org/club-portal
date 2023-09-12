@@ -362,3 +362,4 @@ $RECYCLE.BIN/
 ### Custom ###
 .vscode
 .idea
+/functions/metafile.*
