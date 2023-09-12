@@ -363,3 +363,4 @@ $RECYCLE.BIN/
 .vscode
 .idea
 /functions/metafile.*
+.dev.vars
