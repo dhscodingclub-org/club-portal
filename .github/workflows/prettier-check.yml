@@ -1,0 +1,14 @@
+name: Check formatting with Prettier
+
+on: [push, pull_request]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: true
+      - run: pnpm exec prettier -c .
